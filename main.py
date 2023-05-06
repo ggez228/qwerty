@@ -19,7 +19,10 @@ questions = ["Как вы относитесь к ограничению сво�
              "Как вы относитесь к профсоюзам"]
 
 answers = []
-
+'''
+Хранить всё в глобальном списке - плохая идея 
+(надо будет как-то аккуртано обрабатывать ответы нескольких пользователей одновременно)
+'''
 total_score = []
 
 logging.basicConfig(
@@ -34,6 +37,7 @@ markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 logger = logging.getLogger(__name__)
 
 
+# Непонятно, зачем context во всех этих функциях
 async def echo(update, context):
     await update.message.reply_text(update.message.text)
 
@@ -58,7 +62,9 @@ async def response(update, context):
     return question_number
 
 
+# Очень грустно смотреть на код этой функции - много копипасты(
 async def count(update, context):
+    # Можно было в одной строке все global перечислить
     global answers
     global total_score
 
@@ -131,6 +137,7 @@ async def count(update, context):
     return 13
 
 
+# То же самое - много копипасты(
 async def score(update, context):
     global total_score
     global sc
@@ -164,6 +171,7 @@ async def score(update, context):
     await update.message.reply_text(sc)
 
     sc = ''
+    # Непонятно, зачем записывать 0 в переменные
     horizontal_score = 0
     vertical_score = 0
     total_score = []
@@ -183,6 +191,7 @@ async def stop(update, context):
 
 
 def main():
+    # [note] Отладочный print лучше убирать
     print(answers)
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
